@@ -1,6 +1,6 @@
 # Demo
 
-http://welshdroo-torrent-maker.atwebpages.com/
+https://welshman.github.io/torrent-creator/
 
 # Online torrent file creator
 
