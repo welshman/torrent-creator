@@ -3,7 +3,7 @@ var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
@@ -102,6 +102,12 @@ window.addEventListener("load", function () {
 function ResizeTextarea(element) {
     element.style.height = "auto";
     element.style.height = (element.scrollHeight - 10) + "px";
+}
+function FormatTextareLines(element, resizeTextArea) {
+    if (resizeTextArea === void 0) { resizeTextArea = true; }
+    element.value = element.value.split(/\s+/g).filter(function (str) { return str.length !== 0; }).join("\n");
+    if (resizeTextArea)
+        ResizeTextarea(element);
 }
 function GetSizeStr(size) {
     if (size < 1024)
@@ -207,7 +213,7 @@ function SetTorrentData() {
             return false;
         }
     }
-    var infoObject = (torrentObject && torrentObject["info"]) || { name: "", pieces: "", "piece length": 0, length: 0 };
+    var infoObject = (torrentObject && torrentObject["info"]) || { name: "", pieces: "", "piece length": 0 };
     torrentObject = { "info": infoObject };
     var okTrackersList = Object.keys(okTrackers);
     if (okTrackersList.length !== 0) {
@@ -217,6 +223,9 @@ function SetTorrentData() {
             announceList.push([okTrackersList[i]]);
         torrentObject["announce-list"] = announceList;
     }
+    var webSeeds = document.getElementById("torrent_webseeds").value.split(/\s+/).filter(function (str) { return str.length !== 0; });
+    if (webSeeds.length !== 0)
+        torrentObject["url-list"] = webSeeds;
     var comment = document.getElementById("torrent_comment").value;
     if (comment !== "")
         torrentObject["comment"] = comment;
